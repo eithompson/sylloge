@@ -61,8 +61,7 @@ else:
     links = links[0:n_posts]
 
 # need correct number of zeroes to pad number in filename
-links_len = len(links)
-n_pad = ceil(log10(links_len))
+n_pad = len(str(len(links)))
 
 for idx, link in enumerate(links):
     print(idx)
