@@ -4,13 +4,13 @@
 
 Sylloge is a topic search system whose purpose is to increase the long-term value of a corpus of text to readers and writers. The user provides a search term ("topic") and is returned a document which contains all selections from the corpus that match the topic, and which is itself organized by the source document of each selection. This should be especially useful with corpora containing very long documents which cover many different topics (e.g., books, detailed book reviews/summaries, etc).
 
-The topic tagging NLP model (which determines whether a selection should be returned in a topic search) will be trained on Wikipedia data - this will restrict query-able topics to Wikipedia article titles. A selection of text will be determined as relevant to a topic if the selection is linguistically similar to the topic's Wikipedia page, **or** if it is linguistically similar to Wikipedia pages which are "close" to the topic's Wikipedia page. "Close" is measured by hyperlinks and Wikipedia "metastructures" (e.g., [Categories](https://en.wikipedia.org/wiki/Category:2007_video_games), [Portals](https://en.wikipedia.org/wiki/Portal:History), etc).
+The topic tagging NLP model (which determines whether a selection should be returned in a topic search) will be trained on Wikipedia data - this will restrict query-able topics to Wikipedia article titles (at least as far as the NLP model is concerned - we can still do plaintext search for arbitrary strings). A selection of text will be determined as relevant to a topic if the selection is linguistically similar to the topic's Wikipedia page, **or** if it is linguistically similar to Wikipedia pages which are "close" to the topic's Wikipedia page. "Close" is measured by hyperlinks and Wikipedia "metastructures" (e.g., [Categories](https://en.wikipedia.org/wiki/Category:2007_video_games), [Portals](https://en.wikipedia.org/wiki/Portal:History), etc).
 
 ### A clarification
 
 The original motivation of Sylloge was to maximize the value of the users' own personal writings (such as a blog, or a personal collection of book summaries), ideally with the consequence of encouraging the user to write more by providing a way to usefully access their writings by topic. While this may continue to be a focus of the project, I have realized from scraping a blog (in order to provide some testing data) that indexing _others'_ writings may be just as useful. For instance, the user could add their favorite bloggers or writers to their corpus and easily search through their collected writings. Alternatively, bloggers could add this functionality to their site. Robin Hanson, Tyler Cowen, etc have all written enormous amounts of blog posts. Ideally, Sylloge would provide a better solution to search than bloggers' manual tagging, and plaintext search.
 
-## The multi-topic model
+## NLP and the multi-topic model
 
 The primary building block of Sylloge is what we'll call the **single-topic model**. This is a standard topic tagging NLP model **trained on Wikipedia**, whose input is a topic and a selection of text, and whose output is a boolean indicator of whether the text is a match for the topic. This can either be a simple bag-of-words approach ("does the frequency of each word in the selection from the corpus roughly correspond to the frequency of each word in the topic's wikipedia page?") or any of a number of more advanced models.
 
@@ -24,15 +24,44 @@ Solution: the **multi-topic model**. In the film noir example, the very first li
 
 To facilitate this, we will use [Neo4j](https://en.wikipedia.org/wiki/Neo4j) to store the [Wikipedia data](https://en.wikipedia.org/wiki/Wikipedia:Database_download) in a graph format. Nodes are articles, edges are links. We will need to construct our own links which determine the rules of whether similarity to page x should trigger a match on page y (this might not be transitive!). I call this the **association model**: it is what ties the single-topic models together into a multi-topic model. It will also live in Neo4j.
 
+### Exact matches
+
+Naturally, we will want exact matches to hit. For instance, a "Super Mario Galaxy" search should return a selection which includes "Super Mario Galaxy" in the text, even if the NLP model wouldn't return a hit. We will still use the multi-level model here - so a search for "video game" should also return such cases.
+
+Here's an important thought: **exact matches, combined with the association model, could get us 90% of the way there without NLP**. NLP would be nice to have, but basically having a multi-level model where the single-topic model is simplified to just "does term show up in document" could be very powerful on its own.
+
 ## Infrastructure and workflow
 
 (will write commentary on this in detail later)
 
 ![Infrastructure and workflow](images/infra-1.png)
 
+
+
 ## Interface
 
 Need to flesh out ideas for this. Not urgent, though. Creating the actual interface will likely be the last part - we will probably just be generating markdown files for a while.
+
+### Result presentation
+
+I've mentioned that results should be organized by source document, but I think that may be just a sub-level. With the multi-topic model in mind, it would be great for the top-level organization to be defined by which Wikipedia topic was matched: the Wiki topic of the actual search term, or of an adjacent page? For instance, results for a search for "video game" could look like:
+
+- Selections matching "video game"
+  - Paragraphs 3-5 of document abc (exact match)
+    - ...video game...
+  - Paragraphs 10-15 of document def
+    - ...controller...Atari...Miyamoto... (NLP match)
+- Selections matching "Super Mario Galaxy"
+  - Paragraphs 5-8 of document xyz
+    - ...Super Mario Galaxy... (exact match)
+
+### Result expansion
+
+Long documents which match basically all the way through (say, >50% of [neighborhoods](#note-on-neighborhoods) match) should be truncated, ideally with an option to expand. 
+
+### Custom topic distance
+
+One option we could provide to users is the ability to "expand the search" by being more lax in our association model rules. For instance, allowing Super Mario Galaxy to show up in searches for Mario Kart Wii; there is no direct link from Super Mario Galaxy to Mario Kart Wii, but you can get from one to the other through the Wii page.
 
 ## Note on neighborhoods
 
