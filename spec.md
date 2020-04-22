@@ -32,11 +32,9 @@ Here's an important thought: **exact matches, combined with the association mode
 
 ## Infrastructure and workflow
 
-(will write commentary on this in detail later)
+![Infrastructure and workflow 1](images/infra-1.png)
 
-![Infrastructure and workflow](images/infra-1.png)
-
-
+Above is the rough workflow and data flow for the project.
 
 ## Interface
 
@@ -65,6 +63,6 @@ One option we could provide to users is the ability to "expand the search" by be
 
 ## Note on neighborhoods
 
-We need to check different neighborhoods of each source document against the model. We're not just trying to find source documents that match our search term - we want _selections from_ source documents that match. But how big are the "neighborhoods" that define our candidates for selectionhood? Too narrow, and the returned selections will be too out-of-context. Too wide and there will just be too much text returned from each hit. Simple options for delineating neighbhorhoods: paragraphs, or a set number of sentences.  Another option could be a minimum/maximum between paragraphs and words/characters. As many full paragraphs as are required to reach 100 words, or something like that.
+We need to check different neighborhoods of each source document against the model. We're not just trying to find source documents that match our search term - we want _selections from_ source documents that match. But how big are the "neighborhoods" that define our candidates for selection? Too narrow, and the returned selections will be too out-of-context. Too wide, and there will just be too much text returned from each hit. Simple options for delineating neighbhorhoods: paragraphs, or a set number of sentences.  Another option could be a minimum/maximum between paragraphs and words/characters. As many full paragraphs as are required to reach 100 words, or something like that.
 
 There may be some kind of mathematical trick here if the model is simply frequency-based. Like a kernel density estimate (moving average, basically) combined with a minimum density cutoff. This way we just have a score at each word which gets its actual "neighborhood" score and we only take sentences whose words all score above the cutoff. This seems more elegant.
