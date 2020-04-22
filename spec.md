@@ -30,6 +30,12 @@ Naturally, we will want exact matches to hit. For instance, a "Super Mario Galax
 
 Here's an important thought: **exact matches, combined with the association model, could get us 90% of the way there without NLP**. NLP would be nice to have, but basically having a multi-level model where the single-topic model is simplified to just "does term show up in document" could be very powerful on its own.
 
+### Imbalanced training set (new thought)
+
+At least how the single-topic portion works in my head, any given topic will have orders of magnitude more 0 training cases than 1s. Only one article per topic. Not sure if oversampling makes sense in the context of NLP.
+
+But one solution here: we can also throw in text from the articles that _link to_ the topic. Not the entire article: we need to isolate the neighborhood around where the link happens. Ideally we could also take other non-linking mentions in the linking articles, but this is a lot harder in the cases of small/common/ambiguous words.
+
 ## Infrastructure and workflow
 
 ![Infrastructure and workflow 1](images/infra-1.png)
