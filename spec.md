@@ -18,7 +18,7 @@ On its own, this approach is limited. Imagine a section of an essay talking abou
 
 However, what if the user instead searched for film noir? Surely we would want this selection to be returned to the user. But would it? The language used in our selection might be similar enough to the [film noir page](https://en.wikipedia.org/wiki/Film_noir) (perhaps based on the frequency of Welles's name alone), but then again it might not. The phrase "film noir" is only used two times in the article's text.
 
-Other examples are easy to think of. Is a selection of text which is about Super Mario Galaxy likely to be linguistically similar to the video game Wikipedia page? Probably not. Do we want a search for "video game" to return this selection? Definitely.
+Other examples are easy to think of. Is a selection of text which is about Super Mario Galaxy likely to be linguistically similar to the [video game Wikipedia page](https://en.wikipedia.org/wiki/Video_game)? Probably not. Do we want a search for "video game" to return this selection? Definitely.
 
 Solution: the **multi-topic model**. In the film noir example, the very first link in the Touch of Evil article text is to the film noir page. At the bottom of the article, we see that one of Touch of Evil's categories is film noir. Our text selection may not be similar to the text of the film noir page, but it *is* similar to a page that is clearly connected to film noir. So: we can use the structure of Wikipedia to build a meta-model which matches text to topic either by similarity between text and topic, or by similarity between text and adjacent-topic.
 
