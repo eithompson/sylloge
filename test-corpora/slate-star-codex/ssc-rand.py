@@ -1,5 +1,6 @@
 """
-Scrapes posts from slate star codex. First line is title, second is url, third begins the post.
+Scrapes posts from slate star codex.
+First line is title, second is url, third are tags, fourth begins the post.
 
 Provide command-line arg if you want to get a random sample of posts.
 The argument is the desired number of samples.
@@ -7,7 +8,7 @@ Otherwise, we scrape all posts in order.
 
 We use a wayback version of the archive page so that this is reproducible.
 
-Known problem: sometimes get_post_soup() will not get the entire post.
+Known problem: sometimes extract_text() will not get the entire post.
 You can see this here: https://slatestarcodex.com/2020/04/10/coronalinks-4-10-second-derivative/
 It stops picking it up starting with the blockquote
 """
@@ -37,14 +38,41 @@ def get_post_soup(url):
     """Works for archives page and actual posts."""
     req = Request(url, headers={"User-Agent" : "Magic Browser"})
     con = urlopen(req)
-    soup = BeautifulSoup(con.read(), "html.parser")
-    return soup.find("div", attrs={"class": "pjgm-postcontent"})
+    return BeautifulSoup(con.read(), "html.parser")
 
-def get_real_link(url):
+def extract_text(soup, straighten_quotes = True):
+    """Works for archives page and actual posts."""
+    raw_soup_contents = soup.find("div", attrs={"class": "pjgm-postcontent"})
+    text = raw_soup_contents.get_text()
+    if straighten_quotes:
+        text = fix_quotes(text)
+    return text
+
+def extract_tags(soup):
+    """
+    Get post tags delimited by semicolons.
+    Strangely, soup.find_all(rel='tag') also returns rel='category_tags'
+    We want this stuff, but I don't understand how this works so we need
+    to be ready to throw an error.
+    """
+    list_dict = {"category_tags": [], "tags": []}
+    tag_soups = soup.find_all(rel="tag") # this also gets rel = "category tag"
+    for tag_soup in tag_soups:
+        if tag_soup["rel"] == ["category", "tag"]:
+            list_dict["category_tags"].append(tag_soup.get_text())
+        elif tag_soup["rel"] == ["tag"]:
+            list_dict["tags"].append(tag_soup.get_text())
+        else:
+            raise ValueError("Unknown rel: " + ';'.join(tag_soup["rel"]))
+    out_dict = {"category_tags": ";".join(list_dict["category_tags"]),
+            "tags": ";".join(list_dict["tags"])}
+    return out_dict
+
+def extract_real_link(url):
     """Extract actual ssc link from the link to a wayback archived version"""
     return url[url.find("https", 1):]
 
-def straighten_quotes(string):
+def fix_quotes(string):
     return string.replace('“','"').replace('”','"').replace("‘", "'").replace("’", "'")
 
 archives_soup = get_post_soup(archive_link)
@@ -65,13 +93,17 @@ n_pad = len(str(len(links)))
 
 for idx, link in enumerate(links):
     print(idx)
-    link_url = get_real_link(link.get("href"))
-    post_title = straighten_quotes(link.string)
-    post_filename = post_title.lower().replace(" ", "_")
-    post_filename = str(idx).zfill(n_pad) + "_" + sub("[^A-Za-z0-9_]+", "", post_filename) + ".txt"
+    link_url = extract_real_link(link.get("href"))
+    title = fix_quotes(link.string)
+    filename = title.lower().replace(" ", "_")
+    filename = str(idx).zfill(n_pad) + "_" + sub("[^A-Za-z0-9_]+", "", filename) + ".txt"
     post_soup = get_post_soup(link_url)
-    post_contents = straighten_quotes(post_soup.get_text())
-    with open(output_dir + post_filename, "w") as f:
-        # why do we need newline in between first two but not last two?
-        f.writelines([post_title, "\n", link_url, post_contents])
+    contents_text = extract_text(post_soup)
+    post_tags = extract_tags(post_soup)
+    with open(output_dir + filename, "w") as f:
+        f.writelines([title, "\n",
+            link_url, "\n",
+            post_tags["category_tags"], "\n",
+            post_tags["tags"], # contents start with newline - no need here
+            contents_text])
     sleep(0.25)
