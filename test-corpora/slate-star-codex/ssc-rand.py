@@ -1,6 +1,7 @@
 """
 Scrapes posts from slate star codex.
-First line is title, second is url, third are tags, fourth begins the post.
+First line is title, second is url, third are "category" tags,
+fourth are regular tags, fifth begins the post.
 
 Provide command-line arg if you want to get a random sample of posts.
 The argument is the desired number of samples.
