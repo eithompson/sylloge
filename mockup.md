@@ -5,6 +5,14 @@
 2. A History of the Guillotine (1 location, match via "Robespierre", max relevance score 70%) 
 3. Coldplay: Genius or Mediocre? (1 location, exact match, max relevance score 5%) 
 
+Alternative form:
+- Exact matches:
+  1. An Essay on Three Revolutions (2 locations, max relevance score 97%)
+  2. Coldplay: Genius or Mediocre? (1 location, max relevance score 5%) 
+- Matches via "Robespierre":
+  1. Coldplay: Genius or Mediocre? (1 location, max relevance score 5%) 
+
+
 ## An Essay on Three Revolutions
 
 ### Location 1
