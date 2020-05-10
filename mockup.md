@@ -10,8 +10,9 @@ Alternative form:
   1. An Essay on Three Revolutions (2 locations, max relevance score 97%)
   2. Coldplay: Genius or Mediocre? (1 location, max relevance score 5%) 
 - Matches via "Robespierre":
-  1. Coldplay: Genius or Mediocre? (1 location, max relevance score 5%) 
+  1. A History of the Guillotine (1 location, max relevance score 70%) 
 
+I organized this document according to the first version, but I get a feeling the alternative form is the better structure. It would create some duplicates (if a document matches in more than one way) but I think that it's more useable to be able to scan by _how_ the match was made. If a user doesn't care about Robespierre-specific stuff, they can just skip past all the documents that matched that way.
 
 ## An Essay on Three Revolutions
 

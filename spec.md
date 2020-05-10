@@ -61,13 +61,13 @@ I've mentioned that results should be organized by source document, but I think 
 
 ### Results ordering
 
-For certain searches, ordering will be very important. If a search term's Wiki page connects to many other pages, we coudl end up with too many results. Here are some dimensions along which we can order results.
+For certain searches, ordering will be very important. If a search term's Wiki page connects to many other pages, we could end up with too many results. Here are some dimensions along which we can order results.
 
 - **Relevance**. This is just NLP-based: how close does the text of a neighborhood match the search term's Wiki page (or its respective adjacent term's wiki page)? See the Coldplay example in [this mockup](mockup.md).
 - **Distance from adjacent term to search term**. For adjacent matches (e.g., search for film noir, return a match to Touch of Evil), our main criterion will be the mere existence of a direct Wiki linkage from one page to the other. However, we can get a better sense of how related the terms are if we look at their common linkages, or alternate paths to get from one to the other.
   - Common linkages: what is the intersection our pages links to other pages? For instance, both pages links to Orson Welles. How many of these are there?
   - Alternate paths: how many ways can you get from page A to page B in under n steps (other than the direct linkage)? This is similar to "common linkages" but may be a better way of thinking about it. I'd be surprised if neo4j couldn't easily handle both. 
-- **Page importance**: in a broad sense, how popular/detailed/important/etc is the page? A natural way to measure this is to use Pagerank (for which there is at least one Neo4j implementation). Another way is simply by the length of the page. This may require some tweaking, but I think it's overall a pretty good measure. Long articles are long for a reason. [Idaho Statesman](https://en.wikipedia.org/wiki/Idaho_Statesman) vs. [The New York Times](https://en.wikipedia.org/wiki/The_New_York_Times), [Paranoid](https://en.wikipedia.org/wiki/Paranoid_(album)) vs. [Forbidden](https://en.wikipedia.org/wiki/Forbidden_(Black_Sabbath_album)), etc.
+- **Page importance**. in a broad sense, how popular/detailed/important/etc is the page? A natural way to measure this is to use Pagerank (for which there is at least one Neo4j implementation). Another way is simply by the length of the page. This may require some tweaking, but I think it's overall a pretty good measure. Long articles are long for a reason. [Idaho Statesman](https://en.wikipedia.org/wiki/Idaho_Statesman) vs. [The New York Times](https://en.wikipedia.org/wiki/The_New_York_Times), [Paranoid](https://en.wikipedia.org/wiki/Paranoid_(album)) vs. [Forbidden](https://en.wikipedia.org/wiki/Forbidden_(Black_Sabbath_album)), etc.
 
 We may end up needing to create a composite score out of all of these.
 
