@@ -41,7 +41,7 @@ Some surrounding text.
 ## Coldplay: Genius or Mediocre?
 
 ### Location 1
-*Exact match. Relevance 10%*
+*Exact match. Relevance 5%*
 
 Coldplay has nothing to do with our search term.
 
