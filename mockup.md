@@ -12,7 +12,7 @@
 
 And now we move to the most important revolution of the 18th century.
 
-I am of course speaking of the **French Revolution** (Sylloge bolds the matches). This part of the document mentions many topics that emphasize the centrality of the French Revolution to it: Paris, the Bastille, Louis XVI, Marie Antoinette, blah blah blah. The single-topic model, which uses the Wikipedia page for this topic, tells Sylloge that all of these words mean this part of the text is very much on-topic. This means that this location gets a high relevance score.
+I am of course speaking of the **French Revolution** (Sylloge bolds the matches). This part of the document mentions many topics that emphasize the centrality of the **French Revolution** to it: Paris, the Bastille, Louis XVI, Marie Antoinette, blah blah blah. The single-topic model, which uses the Wikipedia page for this topic, tells Sylloge that all of these words mean this part of the text is very much on-topic. This means that this location gets a high relevance score.
 
 It even has another paragraph that's very clearly relevant to the search term. Three estates, liberalism, Edmund Burke, etc.
 
