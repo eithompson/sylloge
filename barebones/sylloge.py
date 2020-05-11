@@ -65,12 +65,12 @@ def bold_matches(text, search_term):
     finds = finditer(search_term.lower(), text.lower())
     starts = [r.start() for r in finds]
     text_bolded = text
-    # we have to bump up our index each time by 2 * len("**") == 4
-    # hence, adding 2*idx to our calculated starts
+    # we have to bump up our previously-calculated-start each time by 2 * len("**") == 4
+    # since we added a beginning ** and ending ** in the previous iteration
     for idx, start in enumerate(starts):
-        updated_start = start + idx * 4
+        updated_start = start + idx * 2 * len("**")
         text_bolded = text_bolded[:updated_start] + "**" + text_bolded[updated_start:]
-        end = updated_start + len(search_term) + 2
+        end = updated_start + len(search_term) + len("**")
         text_bolded = text_bolded[:end] + "**" + text_bolded[end:]
     return text_bolded
 
