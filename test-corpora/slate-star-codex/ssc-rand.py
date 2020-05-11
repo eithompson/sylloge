@@ -16,7 +16,7 @@ It stops picking it up starting with the blockquote
 from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
 from random import shuffle, seed
-from os import mkdir
+from os import mkdir, path
 from datetime import datetime
 from time import sleep
 from re import sub
@@ -25,6 +25,8 @@ from math import log10, ceil
 
 now = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
 output_dir = "posts/" + now + "/"
+if not path.exists("posts/"):
+    mkdir("posts/")
 mkdir(output_dir)
 seed(321)
 archive_link = "https://web.archive.org/web/20200417005254/https://slatestarcodex.com/archives/"
