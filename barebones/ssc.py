@@ -1,9 +1,12 @@
-def ssc_parse(raw_text):
+def ssc_parse(filepath):
     '''
     Returns dictionary containing title, url, and body.
     Title and url are strings. Body is a list of strings (paragraphs).
     '''
-    parsed_dict = {"title": raw_text[0].strip(),
-            "url": raw_text[1].strip(),
-            "body":  raw_text[4:(len(raw_text) - 1)]}
+
+    with open(filepath) as f:
+        content = f.readlines()
+    parsed_dict = {"title": content[0].strip(),
+            "url": content[1].strip(),
+            "body":  content[4:(len(content) - 1)]}
     return parsed_dict
