@@ -92,7 +92,9 @@ for filename in listdir(corpus_dir):
         for idx, sels in enumerate(selections):
             joined_sels = "\n".join(sels)
             bolded_sels = bold_selection(joined_sels, search_term)
-            md = md + "### Selection " + str(idx + 1) + "\n\n" + bolded_sels + "\n"
+            # only give selection sub-sub-headers if we will loop more than once
+            if len(selections) > 1: md = md + "### Selection " + str(idx + 1) + "\n\n"
+            md = md + bolded_sels + "\n"
 
 with open(output_filepath, "w") as f:
    f.write(md) 
