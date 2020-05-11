@@ -1,16 +1,20 @@
-from ssc import parse_ssc
+from ssc import ssc_parse
 from sys import argv
+from os import listdir, mkdir, path
+from datetime import datetime
 
 now = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
-if len(argv) != 3:
+if len(argv) != 4: # argv[0] is filename
     raise Exception("Supply three arguments: search term and directory of corpus")
-corpus = argv[1]
-search_term = argv[2].lower()
+search_term = argv[1].lower()
+corpus = argv[2]
 corpus_dir = argv[3]
 
-output_dir = "output/" + "corpus/"
-mkdir(output_dir)
-output_filepath = output_dir + search_term + "_" +  now + ".md"
+if not path.exists("output/"):
+    mkdir("output/")
+if not path.exists("output/" + corpus):
+    mkdir("output/" + corpus)
+output_filepath = "output/" + corpus + "/" + search_term + "_" +  now + ".md"
 
 def parse_file(filepath, corpus):
     '''
@@ -19,12 +23,13 @@ def parse_file(filepath, corpus):
     than just ssc (which may have different formats).
     '''
     if corpus == "ssc":
-       parsed_dict = parse_ssc(filepath) 
-   else:
+       parsed_dict = ssc_parse(filepath) 
+
+    else:
        raise ValueError("Please supply valid corpus")
     return parsed_dict
 
-def find_selections(content, search_term):
+def single_source_selections(content, search_term):
     '''
     Takes a list of one source's paragraphs.
     Outputs a list of lists of the selections that match the search term, context included.
@@ -53,6 +58,17 @@ def find_selections(content, search_term):
 
     return selections_list
 
+# build markdown.
+md = "# " + search_term + "\n"
+for filename in listdir(corpus_dir):
+    parsed = parse_file(corpus_dir + "/" + filename, corpus)
+    selections = single_source_selections(parsed["body"], search_term) 
+    if selections is not None:
+        url = parsed["url"][0:-1] # don't want newline
+        md = md + "## " + parsed["title"] + "[" + url + "]\n"
 
+        for idx in range(len(selections)):
+            md = md + "### Selection " + str(idx + 1) + "\n" + "".join(selections[idx])  
 
-
+with open(output_filepath, "w") as f:
+   f.write(md) 
