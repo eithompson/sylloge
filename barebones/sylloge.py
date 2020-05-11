@@ -2,6 +2,7 @@ from ssc import ssc_parse
 from sys import argv
 from os import listdir, mkdir, path
 from datetime import datetime
+from re import finditer
 
 now = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
 if len(argv) != 4: # argv[0] is filename
@@ -61,6 +62,25 @@ def single_source_selections(content, search_term):
 
     return selections_list
 
+def bold_selection(sel, search_term):
+    '''
+    We've already searched through the text to find our selections in the first place
+    so it's a little inefficient to do it again. Fast enough.
+    Have to search case-insensitive but return original case.
+    This implementation sucks - would rather have regex
+    '''
+    finds = finditer(search_term.lower(), sel.lower())
+    starts = [r.start() for r in finds]
+    sel_bolded = sel
+    # we have to bump up our index each time by 2 * len("**") == 4
+    # hence, adding 2*idx to our calculated starts
+    for idx, start in enumerate(starts):
+        updated_start = start + idx * 4
+        sel_bolded = sel_bolded[:updated_start] + "**" + sel_bolded[updated_start:]
+        end = updated_start + len(search_term) + 2
+        sel_bolded = sel_bolded[:end] + "**" + sel_bolded[end:]
+    return sel_bolded
+
 # build markdown.
 # i thought we'd already have newlines from readlines() in ssc_parse() but guess not;
 # adding a lot here
@@ -72,8 +92,10 @@ for filename in listdir(corpus_dir):
         url = parsed["url"][0:-1] # don't want newline
         md = md + "## " + parsed["title"] + "[" + url + "]\n\n"
 
-        for idx in range(len(selections)):
-            md = md + "### Selection " + str(idx + 1) + "\n\n" + "\n".join(selections[idx]) + "\n"
+        for idx, sels in enumerate(selections):
+            joined_sels = "\n".join(sels)
+            bolded_sels = bold_selection(joined_sels, search_term)
+            md = md + "### Selection " + str(idx + 1) + "\n\n" + bolded_sels + "\n"
 
 with open(output_filepath, "w") as f:
    f.write(md) 
