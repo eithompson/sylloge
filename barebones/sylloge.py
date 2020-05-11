@@ -39,12 +39,9 @@ def single_source_selections(content, search_term):
     hits = [idx for idx, val in enumerate(content) if search_term.lower() in val.lower()]
     if hits == []:
         return None
-    print(hits)
     context = [max(0, hit - 1) for hit in hits] + [min(len(content) - 1, hit + 1) for hit in hits]  
-    print(context)
     # combine, dedupe, order
     hits_with_context = sorted(list(set(hits + context)))
-    print(hits_with_context)
     # now, find our selections
     selections_list = []
     for idx in range(len(hits_with_context)):
