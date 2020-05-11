@@ -74,6 +74,19 @@ def bold_selection(sel, search_term):
         sel_bolded = sel_bolded[:end] + "**" + sel_bolded[end:]
     return sel_bolded
 
+def build_source_md(selections):
+    '''
+    Build the main body of the markdown file with output from single_source_selections().
+    '''
+    md_out = ""
+    for idx, sels in enumerate(selections):
+        joined_sels = "\n".join(sels)
+        bolded_sels = bold_selection(joined_sels, search_term)
+        # only give selection sub-sub-headers if we will loop more than once
+        if len(selections) > 1: md_out = md_out + "### Selection " + str(idx + 1) + "\n\n"
+        md_out = md_out + bolded_sels + "\n"
+    return md_out
+
 # build markdown.
 md = "# " + search_term + "\n\n"
 for filename in listdir(corpus_dir):
@@ -82,14 +95,7 @@ for filename in listdir(corpus_dir):
     if selections is not None:
         url = parsed["url"][0:-1] # don't want newline
         title = parsed["title"][0:-1] # don't want newline
-        md = md + "## " + "[" + title + "](" + url + ")\n\n"
-
-        for idx, sels in enumerate(selections):
-            joined_sels = "\n".join(sels)
-            bolded_sels = bold_selection(joined_sels, search_term)
-            # only give selection sub-sub-headers if we will loop more than once
-            if len(selections) > 1: md = md + "### Selection " + str(idx + 1) + "\n\n"
-            md = md + bolded_sels + "\n"
+        md = md + "## " + "[" + title + "](" + url + ")\n\n" + build_source_md(selections)
 
 with open(output_filepath, "w") as f:
    f.write(md) 
