@@ -55,24 +55,24 @@ def single_source_selections(content, search_term):
 
     return selections_list
 
-def bold_selection(sel, search_term):
+def bold_matches(text, search_term):
     '''
     We've already searched through the text to find our selections in the first place
-    so it's a little inefficient to do it again. Fast enough.
+    so it's a little inefficient to do it again. Fast enough though.
     Have to search case-insensitive but return original case.
-    This implementation sucks - would rather have regex
+    This implementation sucks - would rather regex: case-insensitive and capture group?
     '''
-    finds = finditer(search_term.lower(), sel.lower())
+    finds = finditer(search_term.lower(), text.lower())
     starts = [r.start() for r in finds]
-    sel_bolded = sel
+    text_bolded = text
     # we have to bump up our index each time by 2 * len("**") == 4
     # hence, adding 2*idx to our calculated starts
     for idx, start in enumerate(starts):
         updated_start = start + idx * 4
-        sel_bolded = sel_bolded[:updated_start] + "**" + sel_bolded[updated_start:]
+        text_bolded = text_bolded[:updated_start] + "**" + text_bolded[updated_start:]
         end = updated_start + len(search_term) + 2
-        sel_bolded = sel_bolded[:end] + "**" + sel_bolded[end:]
-    return sel_bolded
+        text_bolded = text_bolded[:end] + "**" + text_bolded[end:]
+    return text_bolded
 
 def build_source_md(selections):
     '''
@@ -81,7 +81,7 @@ def build_source_md(selections):
     md_out = ""
     for idx, sels in enumerate(selections):
         joined_sels = "\n".join(sels)
-        bolded_sels = bold_selection(joined_sels, search_term)
+        bolded_sels = bold_matches(joined_sels, search_term)
         # only give selection sub-sub-headers if we will loop more than once
         if len(selections) > 1: md_out = md_out + "### Selection " + str(idx + 1) + "\n\n"
         md_out = md_out + bolded_sels + "\n"
