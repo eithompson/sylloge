@@ -6,7 +6,7 @@ from re import finditer
 
 now = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
 if len(argv) != 4: # argv[0] is filename
-    raise Exception("Supply three arguments: search term and directory of corpus")
+    raise Exception("Supply three arguments: search term, corpus, and directory of corpus")
 search_term = argv[1]
 corpus = argv[2]
 corpus_dir = argv[3]
