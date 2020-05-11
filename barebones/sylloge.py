@@ -79,15 +79,14 @@ def bold_selection(sel, search_term):
     return sel_bolded
 
 # build markdown.
-# i thought we'd already have newlines from readlines() in ssc_parse() but guess not;
-# adding a lot here
 md = "# " + search_term + "\n\n"
 for filename in listdir(corpus_dir):
     parsed = parse_file(corpus_dir + "/" + filename, corpus)
     selections = single_source_selections(parsed["body"], search_term) 
     if selections is not None:
         url = parsed["url"][0:-1] # don't want newline
-        md = md + "## " + parsed["title"] + "[" + url + "]\n\n"
+        title = parsed["title"][0:-1] # don't want newline
+        md = md + "## " + "[" + title + "](" + url + ")\n\n"
 
         for idx, sels in enumerate(selections):
             joined_sels = "\n".join(sels)
