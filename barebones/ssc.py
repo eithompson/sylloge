@@ -8,5 +8,5 @@ def ssc_parse(filepath):
         content = f.readlines()
     parsed_dict = {"title": content[0],
             "url": content[1],
-            "body":  content[4:(len(content) - 1)]}
+            "body":  content[4:]}
     return parsed_dict
