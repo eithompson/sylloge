@@ -11,10 +11,8 @@ search_term = argv[1]
 corpus = argv[2]
 corpus_dir = argv[3]
 
-if not path.exists("output/"):
-    mkdir("output/")
-if not path.exists("output/" + corpus):
-    mkdir("output/" + corpus)
+if not path.exists("output/"): mkdir("output/")
+if not path.exists("output/" + corpus): mkdir("output/" + corpus)
 output_filepath = "output/" + corpus + "/" + search_term + "_" +  now + ".md"
 
 def parse_file(filepath, corpus):
@@ -25,7 +23,6 @@ def parse_file(filepath, corpus):
     '''
     if corpus == "ssc":
        parsed_dict = ssc_parse(filepath) 
-
     else:
        raise ValueError("Please supply valid corpus")
     return parsed_dict
@@ -44,8 +41,7 @@ def single_source_selections(content, search_term):
     hits_with_context = sorted(list(set(hits + context)))
     # now, find our selections
     selections_list = []
-    for idx in range(len(hits_with_context)):
-        paragraph_i = hits_with_context[idx]
+    for idx, paragraph_i in enumerate(hits_with_context):
         paragraph = content[paragraph_i]
         if selections_list == []:
             # starting
