@@ -4,7 +4,7 @@ def ssc_parse(filepath):
     Title and url are strings. Body is a list of strings (paragraphs).
     '''
 
-    with open(filepath) as f:
+    with open(filepath, encoding="utf-8") as f:
         content = f.readlines()
     parsed_dict = {"title": content[0],
             "url": content[1],

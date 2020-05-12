@@ -93,9 +93,9 @@ for filename in listdir(corpus_dir):
     parsed = parse_file(corpus_dir + "/" + filename, corpus)
     selections = single_source_selections(parsed["body"], search_term) 
     if selections is not None:
-        url = parsed["url"][0:-1] # don't want newline
-        title = parsed["title"][0:-1] # don't want newline
+        url = parsed["url"].strip() # don't want newline
+        title = parsed["title"].strip() # don't want newline
         md = md + "## " + "[" + title + "](" + url + ")\n\n" + build_source_md(selections)
 
-with open(output_filepath, "w") as f:
+with open(output_filepath, mode="w", encoding="utf-8") as f:
    f.write(md) 
