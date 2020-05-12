@@ -37,8 +37,6 @@ Now we're talking about the **French Revolution** again. This part has a lower r
 And now we're off the topic again.
 
 ## A History of the Guillotine
-
-### Location 1
 *Match via "Robespierre". Relevance 70%*
 
 This part of the document is about famous people who have been killed by the guillotine.
@@ -48,8 +46,6 @@ Now it starts talking about **Robespierre**. Like in the above document, many te
 Some surrounding text.
 
 ## Coldplay: Genius or Mediocre?
-
-### Location 1
 *Exact match. Relevance 5%*
 
 Coldplay has nothing to do with our search term.
