@@ -34,7 +34,7 @@ def single_source_selections(content, search_term):
     Adjacent hit-paragraphs are concatenated into one selection.
     '''
     hits = [idx for idx, val in enumerate(content) if search_term.lower() in val.lower()]
-    if hits == []:
+    if not hits:
         return None
     context = [max(0, hit - 1) for hit in hits] + [min(len(content) - 1, hit + 1) for hit in hits]  
     # combine, dedupe, order
@@ -43,7 +43,7 @@ def single_source_selections(content, search_term):
     selections_list = []
     for idx, paragraph_i in enumerate(hits_with_context):
         paragraph = content[paragraph_i]
-        if selections_list == []:
+        if not selections_list: 
             # starting
             selections_list.append([paragraph])
         elif hits_with_context[idx - 1] == paragraph_i - 1:
